@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
 
 #define CMP_DIFFER 1
 #define CMP_EQUALS 2
@@ -73,17 +74,37 @@ static int compare(FILE *f0, FILE *f1)
 
 int main(int argc, char **argv)
 {
-	if (argc != 3)
-		kurt_err("usage: cmp <file0> <file1>");
-	verbose = 1;
-	FILE *f0 = fopen(argv[1], "r");
-	FILE *f1 = fopen(argv[2], "r");
+	FILE *f0, *f1;
+	int c, res;
+
+	// check args
+	if (argc < 3)
+		kurt_err("usage: cmp [-v] <file0> <file1>");
+
+	// parse
+	while ((c = getopt(argc, argv, "v")) != -1) {
+		switch (c) {
+		case 'v':
+			verbose = 1;
+			break;
+		case '?':
+			kurt_err("usage: cmp [-v] <file0> <file1>");
+		default:
+			kurt_err("w00t");
+		}
+	}
+
+	// files
+	f0 = fopen(argv[optind + 0], "r");
+	f1 = fopen(argv[optind + 1], "r");
 	if (!f0 || !f1)
 		kurt_err(strerror(errno));
-	int res = compare(f0, f1);
+
+	res = compare(f0, f1);
 	if (res == CMP_EQUALS)
 		printf("Files are equal!\n");
 	else
 		printf("Files differ!\n");
+
 	return EXIT_SUCCESS;
 }
