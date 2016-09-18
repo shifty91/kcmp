@@ -4,8 +4,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#define CMP_DIFFER 1
-#define CMP_EQUALS 2
+enum { CMP_DIFFER, CMP_EQUALS };
 
 static int verbose;
 
