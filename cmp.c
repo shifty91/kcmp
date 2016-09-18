@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <stdarg.h>
 
 enum { CMP_FAILURE = 2, CMP_DIFFER = 1, CMP_EQUALS = 0 };
 
@@ -15,12 +16,15 @@ static struct option long_opts[] = {
 static int verbose;
 
 __attribute__((noreturn)) static void
-kurt_err(const char *msg)
+kurt_err(const char * restrict fmt, ...)
 {
-	if (!msg)
-		printf("ERROR\n");
-	else
-		printf("ERROR: %s\n", msg);
+	va_list args;
+
+	va_start(args, fmt);
+	fprintf(stderr, "ERROR: ");
+	vfprintf(stderr, fmt, args);
+	fprintf(stderr, "\n");
+	va_end(args);
 
 	exit(CMP_FAILURE);
 }
@@ -33,7 +37,7 @@ static int compare(FILE *f0, FILE *f1)
 	unsigned int num_bytes_differ = 0;
 
 	if (!f0 || !f1)
-		return -EINVAL;
+		kurt_err("Invalid arguments passed to '%s'", __func__);
 
 	while (42) {
 		c0 = fgetc(f0);
@@ -42,7 +46,7 @@ static int compare(FILE *f0, FILE *f1)
 		/* end of file one */
 		if (c0 == EOF && c1 != EOF) {
 			if (ferror(f0))
-				kurt_err("IO Error!");
+				kurt_err("IO Error: ", strerror(errno));
 			if (verbose)
 				printf("File one is shorter than file two.\n");
 			res = CMP_DIFFER;
@@ -51,7 +55,7 @@ static int compare(FILE *f0, FILE *f1)
 		/* end of file two */
 		if (c0 != EOF && c1 == EOF) {
 			if (ferror(f1))
-				kurt_err("IO Error!");
+				kurt_err("IO Error: ", strerror(errno));
 			if (verbose)
 				printf("File two is shorter than file one.\n");
 			res = CMP_DIFFER;
@@ -103,8 +107,10 @@ int main(int argc, char **argv)
 	/* files */
 	f0 = fopen(argv[optind + 0], "r");
 	f1 = fopen(argv[optind + 1], "r");
-	if (!f0 || !f1)
-		kurt_err(strerror(errno));
+	if (!f0)
+		kurt_err("Failed to open file '%s': %s", argv[optind + 0], strerror(errno));
+	if (!f1)
+		kurt_err("Failed to open file '%s': %s", argv[optind + 1], strerror(errno));
 
 	res = compare(f0, f1);
 	if (res == CMP_EQUALS)
