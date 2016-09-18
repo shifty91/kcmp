@@ -9,7 +9,8 @@
 
 static int verbose;
 
-static void kurt_err(const char *msg)
+__attribute__((noreturn)) static void
+kurt_err(const char *msg)
 {
 	if (!msg)
 		printf("ERROR\n");
