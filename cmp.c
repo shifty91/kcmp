@@ -39,7 +39,7 @@ static int compare(FILE *f0, FILE *f1)
 		c0 = fgetc(f0);
 		c1 = fgetc(f1);
 
-		// end of file one
+		/* end of file one */
 		if (c0 == EOF && c1 != EOF) {
 			if (ferror(f0))
 				kurt_err("IO Error!");
@@ -48,7 +48,7 @@ static int compare(FILE *f0, FILE *f1)
 			res = CMP_DIFFER;
 			break;
 		}
-		// end of file two
+		/* end of file two */
 		if (c0 != EOF && c1 == EOF) {
 			if (ferror(f1))
 				kurt_err("IO Error!");
@@ -57,11 +57,11 @@ static int compare(FILE *f0, FILE *f1)
 			res = CMP_DIFFER;
 			break;
 		}
-		// end?
+		/* end? */
 		if (c0 == EOF && c1 == EOF)
 			break;
 
-		// cmp
+		/* cmp */
 		if (c0 != c1) {
 			if (verbose)
 				printf("Byte %u differ [ 0x%02x - 0x%02x ]\n", cnt, c0, c1);
@@ -83,11 +83,11 @@ int main(int argc, char **argv)
 	FILE *f0, *f1;
 	int c, res;
 
-	// check args
+	/* check args */
 	if (argc < 3)
 		kurt_err("usage: cmp [-v] <file0> <file1>");
 
-	// parse
+	/* parse */
 	while ((c = getopt_long(argc, argv, "v", long_opts, NULL)) != -1) {
 		switch (c) {
 		case 'v':
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// files
+	/* files */
 	f0 = fopen(argv[optind + 0], "r");
 	f1 = fopen(argv[optind + 1], "r");
 	if (!f0 || !f1)
