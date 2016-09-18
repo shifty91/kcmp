@@ -1,6 +1,6 @@
 RM      := rm
-CC      := clang
-CFLAGS  := -std=gnu99 -Wall -O2
+CC      ?= clang
+CFLAGS  ?= -std=gnu99 -Wall -O2
 LDFLAGS :=
 SOURCES := $(shell find . -name "*.c" -type f -print)
 OBJECTS := $(SOURCES:%.c=%.o)
