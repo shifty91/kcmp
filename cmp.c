@@ -87,10 +87,6 @@ int main(int argc, char **argv)
 	FILE *f0, *f1;
 	int c, res;
 
-	/* check args */
-	if (argc < 3)
-		kurt_err("usage: cmp [-v] <file0> <file1>");
-
 	/* parse */
 	while ((c = getopt_long(argc, argv, "v", long_opts, NULL)) != -1) {
 		switch (c) {
@@ -103,6 +99,10 @@ int main(int argc, char **argv)
 			kurt_err("w00t");
 		}
 	}
+
+	/* check args */
+	if (argc - optind != 2)
+		kurt_err("usage: cmp [-v] <file0> <file1>");
 
 	/* files */
 	f0 = fopen(argv[optind + 0], "r");
