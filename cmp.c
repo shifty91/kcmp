@@ -3,8 +3,14 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <getopt.h>
 
 enum { CMP_DIFFER, CMP_EQUALS };
+
+static struct option long_opts[] = {
+	{ "verbose", no_argument, NULL, 'v' },
+	{ NULL,      0,           NULL,  0  }
+};
 
 static int verbose;
 
@@ -82,7 +88,7 @@ int main(int argc, char **argv)
 		kurt_err("usage: cmp [-v] <file0> <file1>");
 
 	// parse
-	while ((c = getopt(argc, argv, "v")) != -1) {
+	while ((c = getopt_long(argc, argv, "v", long_opts, NULL)) != -1) {
 		switch (c) {
 		case 'v':
 			verbose = 1;
