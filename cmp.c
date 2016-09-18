@@ -67,7 +67,7 @@ static int compare(FILE *f0, FILE *f1)
 		/* cmp */
 		if (c0 != c1) {
 			if (verbose)
-				printf("Byte %zu differ [ 0x%02x - 0x%02x ]\n", cnt, c0, c1);
+				printf("Byte %5zu differs -- [ 0x%02x - 0x%02x ]\n", cnt, c0, c1);
 			++num_bytes_differ;
 			res = CMP_DIFFER;
 		}
