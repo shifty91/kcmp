@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 			verbose = 1;
 			break;
 		case '?':
-			kurt_err("usage: cmp [-v] <file0> <file1>");
+			kurt_err("usage: kcmp [-v] <file0> <file1>");
 		default:
 			kurt_err("w00t");
 		}
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 
 	/* check args */
 	if (argc - optind != 2)
-		kurt_err("usage: cmp [-v] <file0> <file1>");
+		kurt_err("usage: kcmp [-v] <file0> <file1>");
 
 	/* files */
 	f0 = fopen(argv[optind + 0], "r");

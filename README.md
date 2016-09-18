@@ -1,13 +1,13 @@
-# CMP #
+# KCMP #
 
 ## About ##
 
-`cmp` is small tool for comparing two files byte by byte. If the files differ 1
+`kcmp` is small tool for comparing two files byte by byte. If the files differ 1
 is returned, otherwise 0 or 2 if an error ocurred.
 
 ## Usage ##
 
-    usage: cmp [-v] <file0> <file1>
+    usage: kcmp [-v] <file0> <file1>
 	  options:
 	    --verbose, -v: enable verbose output
 
