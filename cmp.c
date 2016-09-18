@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-enum { CMP_DIFFER, CMP_EQUALS };
+enum { CMP_FAILURE = 2, CMP_DIFFER = 1, CMP_EQUALS = 0 };
 
 static struct option long_opts[] = {
 	{ "verbose", no_argument, NULL, 'v' },
@@ -22,7 +22,7 @@ kurt_err(const char *msg)
 	else
 		printf("ERROR: %s\n", msg);
 
-	exit(EXIT_FAILURE);
+	exit(CMP_FAILURE);
 }
 
 static int compare(FILE *f0, FILE *f1)
@@ -112,5 +112,5 @@ int main(int argc, char **argv)
 	else
 		printf("Files differ!\n");
 
-	return EXIT_SUCCESS;
+	return res;
 }
