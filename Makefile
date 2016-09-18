@@ -5,7 +5,9 @@ LDFLAGS :=
 SOURCES := $(shell find . -name "*.c" -type f -print)
 OBJECTS := $(SOURCES:%.c=%.o)
 DEPS    := $(OBJECTS:%.o=%.d)
-PROG    := cmp
+PROG    := kcmp
+PREFIX  ?= /usr/local
+INSTALL ?= /usr/bin/install
 
 all: $(PROG)
 
@@ -23,10 +25,14 @@ $(PROG): $(OBJECTS)
 
 clean:
 	@echo "CLEAN"
-	@$(RM) -f *.o *.d main
+	@$(RM) -f *.o *.d $(PROG)
+
+install: $(PROG)
+	@echo "Installing		$<"
+	@$(INSTALL) -m 0755 $(PROG) $(PREFIX)/bin
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(DEPS)
 endif
 
-.PHONY: all clean
+.PHONY: all clean install
